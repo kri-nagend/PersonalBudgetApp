@@ -1,8 +1,19 @@
 import csv
+import os
+import shutil
+import pandas as pd
+import glob
 
 mydict = {}
 
-with open('bday.csv') as csv_file:
+path = r'./Files/RogersMC/' # use your path
+frame = pd.concat([pd.read_csv(f, sep=',') for f in glob.glob(path + "/*.csv")], ignore_index=True)
+
+frame.to_csv( "./Files/RogersMC/res/combined_csv.csv", index=False, encoding='utf-8-sig')
+
+
+mydict = {}
+with open('./Files/RogersMC/res/combined_csv.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     mydict = {}
@@ -11,7 +22,7 @@ with open('bday.csv') as csv_file:
             print(f'Column names are {", ".join(row)}')
             line_count += 1
         else:
-            print(f'\t on {row[0]} a {row[3]} {row[1]} was made at {row[2]} for ${row[4]}')
+            # print(f'\t on {row[0]} a {row[3]} {row[1]} was made at {row[2]} for ${row[4]}')
             if row[3] in mydict:
                 mydict[row[3]] += float(row[4])
             else:
@@ -24,4 +35,3 @@ with open('bday.csv') as csv_file:
         mydict[k] = round(v,2)
 
     print(mydict)
-
